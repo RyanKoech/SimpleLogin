@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import '../services/dashboard_service.dart';
 
-class DashboardPage extends StatefulWidget {
+class DashboardScreen extends StatefulWidget {
   final String bearerToken;
 
-  DashboardPage({required this.bearerToken});
+  DashboardScreen({required this.bearerToken});
 
   @override
-  _DashboardPageState createState() => _DashboardPageState();
+  _DashboardScreenState createState() => _DashboardScreenState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _DashboardScreenState extends State<DashboardScreen> {
   Map<String, dynamic> dashboardData = {}; // To store the received data
 
   Future<void> _fetchDashboardData() async {
