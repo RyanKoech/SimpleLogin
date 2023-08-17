@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+import '../services/dashboard_service.dart';
 
 class DashboardPage extends StatefulWidget {
   final String bearerToken;
@@ -15,22 +14,15 @@ class _DashboardPageState extends State<DashboardPage> {
   Map<String, dynamic> dashboardData = {}; // To store the received data
 
   Future<void> _fetchDashboardData() async {
-    final url = 'https://dev.cpims.net/api/dashboard/'; // Replace with the actual dashboard API endpoint
-
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {"Authorization": "Bearer ${widget.bearerToken}"},
-    );
-
-    if (response.statusCode == 200) {
-      final jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
+    try {
+      final jsonResponse = await fetchDashboardData(widget.bearerToken);
       setState(() {
         dashboardData = jsonResponse;
       });
-    } else {
+    } catch(e) {
       // Handle error
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Fetching Data Failed')),
+        SnackBar(content: Text(e as String)),
       );
     }
   }
