@@ -37,32 +37,93 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Dashboard')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Dashboard Data',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Welcome to Your Dashboard',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            if (dashboardData.isNotEmpty)
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildCard(
+                    title: 'Government',
+                    value: dashboardData['government'].toString(),
+                  ),
+                  _buildCard(
+                    title: 'NGO',
+                    value: dashboardData['ngo'].toString(),
+                  ),
+                  // Add more cards for other data fields
+                ],
               ),
-              SizedBox(height: 20),
-              if (dashboardData.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Government: ${dashboardData['government']}'),
-                    Text('NGO: ${dashboardData['ngo']}'),
-                    // Add more data fields here
-                  ],
-                ),
-              if (dashboardData.isEmpty)
-                CircularProgressIndicator(), // Display loading indicator
-            ],
-          ),
+            if (dashboardData.isNotEmpty)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20),
+                  Text(
+                    'Organization Unit:',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    dashboardData['org_unit'],
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Details:',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    dashboardData['details'],
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            if (dashboardData.isEmpty)
+              Center(child: CircularProgressIndicator()), // Display loading indicator
+          ],
         ),
       ),
     );
   }
+
+  Widget _buildCard({required String title, required String value}) {
+    return Card(
+      color: Colors.blue,
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+              title,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text(
+              value,
+              style: TextStyle(fontSize: 24),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 }

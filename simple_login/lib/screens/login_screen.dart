@@ -19,8 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
     try {
-      final jsonResponse  = await performLogin("testhealthit", "T3st@987654321");
-      // final jsonResponse  = await performLogin(_usernameController.text, _passwordController.text);
+      final jsonResponse  = await performLogin(_usernameController.text, _passwordController.text);
       setState((){
         _isLoading = false;
       });
