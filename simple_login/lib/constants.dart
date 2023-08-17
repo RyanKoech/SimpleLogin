@@ -1,0 +1,1 @@
+const baseUrl = 'https://dev.cpims.net/api/';

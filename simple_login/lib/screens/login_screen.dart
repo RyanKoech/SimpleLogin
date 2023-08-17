@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import '../services/auth_service.dart';
 import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -76,27 +77,18 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   Future<void> _login() async {
-    final url = 'https://dev.cpims.net/api/token/'; // Replace with your API endpoint
-
-    // final body = json.encode({
-    //   "username": _usernameController.text,
-    //   "password": _passwordController.text,
-    // });
-
-    final response = await http.post(
-      Uri.parse(url),
-      // headers: {"Content-Type": "application/json"},
-      body: {
-        "username": "testhealthit",
-        "password": "T3st@987654321",
-      },
-    );
-
-    if (response.statusCode == 200) {
-      // Successful login, navigate to dashboard
-      final jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
+    setState((){
+      _isLoading = true;
+    });
+    try {
+      // final jsonResponse  = await performLogin("testhealthit", "T3st@98765432");
+      final jsonResponse  = await performLogin(_usernameController.text, _passwordController.text);
+      setState((){
+        _isLoading = false;
+      });
       final token = jsonResponse['access'] as String;
       Navigator.pushReplacement(
         context,
@@ -104,11 +96,12 @@ class _LoginPageState extends State<LoginPage> {
           builder: (context) => DashboardPage(bearerToken: token),
         ),
       );
-
-    } else {
-      // Handle error
+    }catch(e) {
+      setState((){
+        _isLoading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed')),
+        SnackBar(content: Text(e as String)),
       );
     }
   }
@@ -118,7 +111,9 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(title: Text('Login')),
       body: Center(
-        child: Padding(
+        child: _isLoading
+        ?const CircularProgressIndicator()
+        :Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
